@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Audio Test</title>
+</head>
+
+<body>
+    <h1>Audio Test</h1>
+    <button onclick="document.getElementById('test1').play()">Play Hover Sound</button>
+    <button onclick="document.getElementById('test2').play()">Play Logo Intro Sound</button>
+
+    <audio id="test1" controls>
+        <source src="studiolumio.com/sound/hover_button.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="test2" controls>
+        <source src="studiolumio.com/sound/logo_intro.mp3" type="audio/mpeg">
+    </audio>
+
+    <p>Tests for hover and logo intro sounds. Both should load and play correctly.</p>
+</body>
+
+</html>

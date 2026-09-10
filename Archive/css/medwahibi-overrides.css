@@ -1,0 +1,331 @@
+/* Global Text Color - Enforce White on all text elements */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+a,
+div,
+span,
+label {
+    color: var(--white) !important;
+}
+
+/* Subheadlines - Lime Green */
+.hero__subtitle,
+.hero__headline.is--last,
+strong,
+b,
+.bold,
+span.bold {
+    color: var(--accent) !important;
+}
+
+/* Specific overrides to ensure white text where it might be overridden back */
+.hero__title,
+.hero__paragraph,
+.question__title,
+.radio-txt,
+.footer__text,
+.nav__item,
+.hero__headline.is-first-sentence {
+    color: var(--white) !important;
+}
+
+/* Buttons - Default (white outline / white text) */
+.w-button,
+.cta,
+.radio__button,
+.button {
+    color: var(--white) !important;
+    border-color: var(--white) !important;
+}
+
+.w-button:hover,
+.cta:hover {
+    background-color: var(--white) !important;
+    color: var(--black) !important;
+}
+
+/* ========================
+   ACCENT BUTTON (Lime Green) — black text ALWAYS
+   Use class .btn-accent on any primary CTA button
+   ======================== */
+.btn-accent,
+.nav-tab-highlight,
+.footer-btn-highlight,
+.gd-cta,
+.gd-filter-btn.active {
+    background-color: var(--accent) !important;
+    color: var(--black) !important;
+    border-color: var(--accent) !important;
+}
+
+/* Ensure children (spans) inside accent buttons also get black text */
+.btn-accent *,
+.nav-tab-highlight *,
+.footer-btn-highlight *,
+.gd-cta *,
+.gd-filter-btn.active * {
+    color: var(--black) !important;
+}
+
+/* Legacy ghost-style buttons (NOT for accent/lime buttons) */
+.button-primary,
+.is--primary,
+.cta.is--reverse {
+    background-color: transparent !important;
+    border: 1px solid var(--white) !important;
+    color: var(--white) !important;
+}
+
+.button-primary:hover,
+.is--primary:hover,
+.cta.is--reverse:hover {
+    background-color: var(--white) !important;
+    color: var(--black) !important;
+    border-color: var(--white) !important;
+}
+
+/* Logos - Make them white */
+.marquee-logo,
+.client-logo {
+    filter: brightness(0) invert(1) !important;
+    opacity: 1 !important;
+}
+
+/* Transparent Backgrounds */
+.header,
+.footer-new,
+.nav-tabs {
+    background: transparent !important;
+}
+
+/* Ensure Nav Tabs are visible against dark background if needed */
+.nav-tab {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: var(--white) !important;
+}
+
+.nav-tab:hover,
+.nav-tab-highlight {
+    background: var(--accent) !important;
+    color: var(--black) !important;
+    border-color: var(--accent) !important;
+}
+
+/* Old footer override if we keep it, but we plan to replace it */
+.footer.is--black {
+    background-color: transparent !important;
+}
+
+.footer__text,
+.nav__item.text-white {
+    color: var(--white) !important;
+}
+
+/* Remove white background from any specific sections if they have it */
+.section,
+.is--hero,
+.global {
+    background-color: transparent !important;
+}
+
+/* Make sure the WebGL canvas is seen behind */
+.main,
+.section {
+    background: transparent !important;
+}
+
+/* ========================
+   IMPORTED STYLES FROM INDEX-NEW
+   ======================== */
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: var(--header-padding);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    mix-blend-mode: difference;
+    background: transparent !important;
+}
+
+.logo-img {
+    height: 24px;
+    width: auto;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+
+/* Navigation Tabs */
+.nav-tabs {
+    position: fixed;
+    top: 30px;
+    right: 40px;
+    display: flex;
+    gap: 15px;
+    z-index: 100;
+    background: transparent !important;
+}
+
+.nav-tab {
+    padding: 12px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: var(--white) !important;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.nav-tab-highlight {
+    background: var(--accent) !important;
+    color: var(--black) !important;
+    border-color: var(--accent) !important;
+}
+
+/* Footer */
+.footer-new {
+    position: relative;
+    width: 100%;
+    padding: 30px 40px;
+    background: transparent !important;
+    z-index: 100;
+    margin-top: 50px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.footer-bio h3 {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--white);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.footer-cta {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-btn {
+    padding: 10px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--white);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.footer-btn-highlight {
+    background: var(--accent) !important;
+    color: var(--black) !important;
+    border-color: var(--accent) !important;
+}
+
+.footer-social {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-social a {
+    color: var(--white);
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.footer-social a:hover {
+    opacity: 1;
+}
+
+.footer-times {
+    display: flex;
+    gap: 40px;
+}
+
+.time-zone {
+    text-align: right;
+}
+
+.time-location {
+    font-size: 12px;
+    color: var(--gray);
+    margin-bottom: 4px;
+}
+
+.time-display {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--white);
+}
+
+.time-tz {
+    font-size: 11px;
+    color: var(--gray);
+    margin-top: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header {
+        padding: 20px;
+    }
+
+    .nav-tabs {
+        top: 80px;
+        right: 20px;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+}
+
+/* =============================================
+   SCROLL STATE: Solid Header & Footer
+   (Inner pages only — NOT applied on index.html)
+   ============================================= */
+.header.is-scrolled {
+    background-color: var(--black) !important;
+    mix-blend-mode: normal !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+
+.footer-new.is-scrolled {
+    background-color: var(--black) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background-color 0.35s ease, border-color 0.35s ease;
+}

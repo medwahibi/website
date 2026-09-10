@@ -1,0 +1,55 @@
+/* ========================
+   THEME CONFIGURATION
+   ======================== */
+
+:root {
+    /* Colors */
+    --accent: #c4ff00;
+    /* Lime Green */
+    --white: #ffffff;
+    --black: #000000;
+    --gray: #999999;
+    --dark-gray: #1a1a1a;
+
+    /* Typography */
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    /* Spacing */
+    --container-padding: 80px 40px;
+    --header-padding: 30px 40px;
+}
+
+/* Global Reset & Typography Enforcements */
+body {
+    font-family: var(--font-primary) !important;
+    background-color: var(--black) !important;
+    color: var(--white) !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Selection Color */
+::selection {
+    background: var(--accent) !important;
+    color: var(--black) !important;
+}
+
+::-moz-selection {
+    background: var(--accent) !important;
+    color: var(--black) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    background: var(--black);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--dark-gray);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}

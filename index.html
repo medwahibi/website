@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Med Wahibi - Graphic Designer & AI Linguistics Researcher</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="./images/Favicon.webp" rel="shortcut icon" type="image/x-icon">
+    <link href="./css/theme.css" rel="stylesheet" type="text/css">
+
+    <style>
+        @font-face {
+            font-family: 'Glock Grotesque';
+            src: url('./fonts/Glock Grotesque.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        /* ========================
+           RESET & CORE STYLES
+           ======================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Root variables are now imported from theme.css */
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: var(--white);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            cursor: none;
+            /* Hide default cursor */
+        }
+
+        html {
+            overflow-x: hidden;
+        }
+
+        a,
+        button,
+        .nav-tab,
+        .footer-btn,
+        .client-logo {
+            cursor: none;
+        }
+
+        /* Prevent Selection */
+        .noselect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* ========================
+           CUSTOM CURSOR
+           ======================== */
+        .cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10001;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: normal;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+        }
+
+        .cursor-dot.active {
+            transform: translate(-50%, -50%) scale(3);
+            mix-blend-mode: difference;
+        }
+
+        /* ========================
+           HERO EFFECTS (MAGNETIC TEXT & GLITCH)
+           ======================== */
+
+        /* Magnetic Start */
+        .glitch-target {
+            display: inline-block;
+        }
+
+        .magnetic-char {
+            display: inline-block;
+            transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+            will-change: transform;
+        }
+
+        /* RGB Glitch Effect */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .glitch-text.active::before {
+            animation: glitch-1 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+            color: #ff0000;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .glitch-text.active::after {
+            animation: glitch-2 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite reverse;
+            color: #00ffff;
+            z-index: -2;
+            opacity: 0.8;
+        }
+
+        @keyframes glitch-1 {
+
+            0%,
+            100% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(-3px, 3px);
+            }
+
+            40% {
+                transform: translate(-3px, -3px);
+            }
+
+            60% {
+                transform: translate(3px, 3px);
+            }
+
+            80% {
+                transform: translate(3px, -3px);
+            }
+        }
+
+        @keyframes glitch-2 {
+
+            0%,
+            100% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(3px, -3px);
+            }
+
+            40% {
+                transform: translate(3px, 3px);
+            }
+
+            60% {
+                transform: translate(-3px, -3px);
+            }
+
+            80% {
+                transform: translate(-3px, 3px);
+            }
+        }
+
+        /* ========================
+           PRELOADER
+           ======================== */
+        .preloader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            flex-direction: column;
+        }
+
+        .preloader-container.hidden {
+            display: none !important;
+        }
+
+        .loader-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            height: 100vh;
+        }
+
+        svg.logo-svg {
+            height: 140px;
+            overflow: visible;
+            color: white;
+        }
+
+        svg.logo-svg path {
+            fill: currentColor;
+            stroke: none;
+        }
+
+        .center-content {
+            margin-top: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            z-index: 10;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        /* button styles removed */
+
+        .sub-link {
+            font-size: 12px;
+            color: white;
+            text-decoration: underline;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+
+        /* ========================
+           TRANSITION CURTAIN
+           ======================== */
+        
+
+        /* Top Curved Edge - REMOVED (Flat Top) */
+        .transition-curtain::before {
+            display: none;
+        }
+
+        /* Bottom Curved Edge */
+        .transition-curtain::after {
+            content: '';
+            position: absolute;
+            bottom: -20vh;
+            left: 0;
+            width: 100%;
+            height: 20vh;
+            background-color: #c4ff00;
+            border-radius: 0% 0% 0 0;
+            /* Convex (n-shape) */
+        }
+
+        /* ========================
+           MAIN CONTENT
+           ======================== */
+        #main-content {
+            opacity: 0;
+            visibility: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        #main-content.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+
+        .logo-img {
+            height: 24px;
+            width: auto;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        /* Container & Hero */
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .intro-text {
+
+            color: var(--gray);
+            margin-bottom: 40px;
+        }
+
+        .description {
+            font-family: 'Glock Grotesque', sans-serif;
+            color: var(--gray);
+            margin-bottom: 40px;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .title-wrapper {
+            margin-bottom: 60px;
+        }
+
+        .main-title {
+            font-family: 'Glock Grotesque', sans-serif;
+            font-size: clamp(32px, 6vw, 75px);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            margin-bottom: 20px;
+            /* Animation set by JS */
+        }
+
+        .subtitle {
+            font-family: 'Glock Grotesque', sans-serif;
+            font-size: clamp(32px, 6vw, 75px);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            color: var(--white);
+        }
+
+        /* Clients */
+        .clients {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .clients-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gray);
+        }
+
+        .client-logos {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .client-logo {
+            height: 30px;
+            width: auto;
+            max-width: 120px;
+            opacity: 0.45;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            filter: brightness(0) invert(1);
+            object-fit: contain;
+            display: block;
+        }
+
+        .client-logo:hover {
+            opacity: 1;
+            transform: scale(1.08);
+        }
+
+        /* Footer */
+        .footer-new {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px 40px;
+            background: transparent;
+            z-index: 100;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .footer-bio h3 {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--white);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .footer-cta {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-btn {
+            padding: 10px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .footer-btn-highlight {
+            background: #c4ff00;
+            color: var(--black);
+            border-color: #c4ff00;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-social a {
+            color: var(--white);
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            opacity: 1;
+        }
+
+        .footer-times {
+            display: flex;
+            gap: 40px;
+        }
+
+        .time-zone {
+            text-align: right;
+        }
+
+        .time-location {
+            font-size: 12px;
+            color: var(--gray);
+            margin-bottom: 4px;
+        }
+
+        .time-display {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .time-tz {
+            font-size: 11px;
+            color: var(--gray);
+            margin-top: 2px;
+        }
+
+        /* ======================================
+           RESPONSIVE — MOBILE FIRST
+           ====================================== */
+
+        /* ── All mobile & tablet (≤ 768px) ── */
+        @media (max-width: 768px) {
+
+            /* --- Cursor off --- */
+            .cursor-dot { display: none; }
+            body { cursor: auto; }
+            a, button, .nav-tab, .footer-btn, .client-logo { cursor: pointer; }
+
+            /* ── PAGE FLOW: everything scrolls ── */
+            body { overflow-y: auto; }
+
+            /* ─────────────────────────────────────
+               HERO — centered, with ornament & signature
+               ───────────────────────────────────── */
+            .container {
+                min-height: auto;
+                padding: 48px 24px 32px;
+                align-items: center;
+                text-align: center;
+                justify-content: center;
+            }
+
+            .intro-text { display: none; }
+
+            /* ── Flower wind-sway keyframes ── */
+            @keyframes flower-sway {
+                0%   { transform: rotate(-4deg) translateX(-3px); }
+                25%  { transform: rotate(2deg)  translateX(2px);  }
+                50%  { transform: rotate(-2deg) translateX(-1px); }
+                75%  { transform: rotate(3.5deg) translateX(2.5px); }
+                100% { transform: rotate(-4deg) translateX(-3px); }
+            }
+
+            @keyframes flower-float {
+                0%   { margin-bottom: 24px; }
+                50%  { margin-bottom: 28px; }
+                100% { margin-bottom: 24px; }
+            }
+
+            @keyframes flower-breath {
+                0%   { opacity: 0.75; }
+                50%  { opacity: 0.92; }
+                100% { opacity: 0.75; }
+            }
+
+            /* Flower ornament above the title */
+            .mobile-flower-ornament {
+                display: block;
+                width: 120px;
+                height: auto;
+                margin: 0 auto 24px;
+                opacity: 0.85;
+                transform-origin: bottom center;
+                animation:
+                    flower-sway   4.2s ease-in-out infinite,
+                    flower-float  6.1s ease-in-out infinite,
+                    flower-breath 8.3s ease-in-out infinite;
+                will-change: transform, opacity;
+            }
+
+            /* Signature below the title */
+            .mobile-signature {
+                display: block;
+                width: 140px;
+                height: auto;
+                margin: 28px auto 0;
+                opacity: 0.7;
+                filter: brightness(0) invert(1);
+            }
+
+            .main-title,
+            .subtitle {
+                font-size: clamp(28px, 9vw, 42px);
+                line-height: 1.0;
+                letter-spacing: -0.01em;
+                font-weight: 700;
+            }
+
+            .title-wrapper { margin-bottom: 0; }
+
+            .description {
+                font-size: 13px;
+                line-height: 1.8;
+                color: rgba(255, 255, 255, 0.6);
+                max-width: 340px;
+                margin: 32px auto 0;
+                letter-spacing: 0.01em;
+                text-align: center;
+            }
+
+            /* ─────────────────────────────────────
+               TRUSTED BY — centered with horizontal logos
+               ───────────────────────────────────── */
+            .clients {
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+                margin-top: 36px;
+                padding-bottom: 0;
+                border-bottom: none;
+            }
+
+            .clients-label {
+                font-size: 11px;
+                letter-spacing: 3px;
+                opacity: 0.5;
+                text-transform: uppercase;
+                text-align: center;
+            }
+
+            .client-logos {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                gap: 20px;
+                align-items: center;
+                justify-content: center;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                width: 100%;
+                padding: 4px 0;
+            }
+
+            .client-logos::-webkit-scrollbar { display: none; }
+
+            .client-logo {
+                height: 22px;
+                max-width: 80px;
+                flex-shrink: 0;
+                opacity: 0.55;
+            }
+
+            /* ─────────────────────────────────────
+               FOOTER — mobile stacked layout
+               ───────────────────────────────────── */
+            .footer-new {
+                position: static;
+                width: 100%;
+                padding: 0;
+                background: transparent;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                gap: 0;
+            }
+
+            /* Bio block */
+            .footer-bio {
+                padding: 36px 24px 20px;
+                border-bottom: none;
+                text-align: center;
+            }
+
+            .footer-bio h3 {
+                font-size: 15px;
+                line-height: 1.8;
+                color: rgba(255, 255, 255, 0.7);
+                font-weight: 400;
+                letter-spacing: 0.02em;
+            }
+
+            /* CTA Buttons — side by side */
+            .footer-cta {
+                display: flex;
+                flex-direction: row;
+                gap: 12px;
+                padding: 24px 24px 0;
+                justify-content: center;
+            }
+
+            .footer-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: auto;
+                text-align: center;
+                padding: 12px 22px;
+                font-size: 14px;
+                font-weight: 500;
+                border: 1px solid rgba(255, 255, 255, 0.35);
+                letter-spacing: 0.02em;
+                white-space: nowrap;
+                border-radius: 0;
+            }
+
+            .footer-btn-highlight {
+                background: #c4ff00;
+                color: #000 !important;
+                border-color: #c4ff00;
+            }
+
+            /* Social icons — centered row */
+            .footer-social {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                gap: 28px;
+                padding: 32px 24px 48px;
+                border-bottom: none;
+            }
+
+            .footer-social a {
+                opacity: 0.55;
+            }
+
+            .footer-social a svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            /* Hide clock on mobile */
+            .footer-times { display: none; }
+
+            /* Preloader */
+            svg.logo-svg { height: 80px; }
+        }
+
+        /* ── Tablet refinements (481px – 768px) ── */
+        @media (min-width: 481px) and (max-width: 768px) {
+
+            .header { padding: 16px 28px; }
+            .logo-img { height: 20px; }
+
+            .nav-tab { padding: 9px 18px; font-size: 13px; }
+
+            .container {
+                padding: 64px 32px 56px;
+            }
+
+            .main-title, .subtitle {
+                font-size: clamp(32px, 7vw, 54px);
+            }
+
+            .client-logos {
+                grid-template-columns: repeat(4, auto);
+                gap: 20px 32px;
+            }
+
+            .client-logo { height: 24px; }
+
+            .footer-bio { padding: 36px 32px 28px; }
+            .footer-cta { padding: 0 32px; }
+            .footer-btn { padding: 18px 32px; }
+            .footer-social { padding: 28px 32px; gap: 28px; }
+            .footer-times { padding: 28px 32px 48px; }
+            .time-display { font-size: 26px; }
+        }
+
+        /* ========================
+               MOBILE MENU TOGGLE
+               ======================== */
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            const menuOverlay = document.getElementById('mobileMenuOverlay');
+
+            let menuTl;
+
+            function openMenu() {
+                menuBtn.classList.add('open');
+                menuBtn.setAttribute('aria-expanded', 'true');
+                menuOverlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+
+                if (menuTl) menuTl.kill();
+                menuTl = gsap.timeline();
+
+                // Set initial states
+                gsap.set('.menu-flower', { opacity: 0, y: -20, scale: 0.8 });
+                gsap.set('.menu-connecting-line', { scaleY: 0, opacity: 0 });
+                gsap.set('.mobile-menu-link', { opacity: 0, x: -30 });
+                gsap.set('.mobile-menu-sheet', { opacity: 0, y: 50 });
+                gsap.set('.mobile-menu-sheet .description', { opacity: 0, y: 10 });
+                gsap.set('.mobile-menu-btn-dark, .mobile-menu-btn-lime', { opacity: 0, scale: 0.9 });
+                gsap.set('.mobile-menu-socials a', { opacity: 0, y: 10 });
+
+                // Animate in
+                menuTl.to('.menu-flower', { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'back.out(1.5)', delay: 0.2 })
+                      .to('.menu-connecting-line', { scaleY: 1, opacity: 1, duration: 0.6, ease: 'power3.inOut' }, "-=0.3")
+                      .to('.mobile-menu-link', { opacity: 1, x: 0, duration: 0.5, stagger: 0.1, ease: 'power3.out' }, "-=0.4")
+                      .to('.mobile-menu-sheet', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, "-=0.3")
+                      .to('.mobile-menu-sheet .description', { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, "-=0.3")
+                      .to('.mobile-menu-btn-dark, .mobile-menu-btn-lime', { opacity: 1, scale: 1, duration: 0.4, stagger: 0.1, ease: 'back.out(1.2)' }, "-=0.2")
+                      .to('.mobile-menu-socials a', { opacity: 1, y: 0, duration: 0.3, stagger: 0.05, ease: 'power2.out' }, "-=0.2");
+            }
+
+            function closeMenu() {
+                menuBtn.classList.remove('open');
+                menuBtn.setAttribute('aria-expanded', 'false');
+                menuOverlay.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+
+            if (menuBtn && menuOverlay) {
+                menuBtn.addEventListener('click', () => {
+                    menuBtn.classList.contains('open') ? closeMenu() : openMenu();
+                });
+                menuOverlay.querySelectorAll('.mobile-menu-link, .mobile-menu-btn-dark, .mobile-menu-btn-lime').forEach(link => {
+                    link.addEventListener('click', closeMenu);
+                });
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') closeMenu();
+                });
+                
+                // Bulletproof anti-scrolling while menu is open (for iOS/Safari)
+                menuOverlay.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                }, { passive: false });
+                menuOverlay.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                }, { passive: false });
+            }
+
+            /* ========================
+               1. AUDIO SETUP
+               ======================== */
+            const hoverSound = new Audio('studiolumio.com/sound/hover_button.mp3');
+            const logoSound = new Audio('studiolumio.com/sound/logo_intro.mp3');
+
+            function playHover() {
+                hoverSound.currentTime = 0;
+                hoverSound.play().catch(e => { });
+            }
+
+            function playLogoIntro() {
+                logoSound.currentTime = 0;
+                logoSound.play().catch(e => { });
+            }
+
+            /* ========================
+               2. CUSTOM CURSOR
+               ======================== */
+            const cursorDot = document.querySelector('.cursor-dot');
+            document.addEventListener('mousemove', (e) => {
+                gsap.set(cursorDot, { x: e.clientX, y: e.clientY });
+            });
+
+            // Interactive Hover States
+            const allInteractive = document.querySelectorAll('a, button, .nav-tab, .enter-btn, .sub-link, .footer-btn, .client-logo');
+            allInteractive.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    playHover();
+                    gsap.to(cursorDot, { scale: 3, mixBlendMode: 'difference', duration: 0.3 });
+
+                    if (el.classList.contains('nav-tab') && !el.classList.contains('nav-tab-highlight')) {
+                        gsap.to(el, { scale: 1.05, backgroundColor: 'var(--accent)', color: 'var(--black)', borderColor: 'var(--accent)', duration: 0.3 });
+                    }
+                    if (el.classList.contains('footer-btn')) {
+                        gsap.to(el, { scale: 1.05, duration: 0.3 });
+                    }
+                });
+
+                el.addEventListener('mouseleave', () => {
+                    gsap.to(cursorDot, { scale: 1, mixBlendMode: 'normal', duration: 0.3 });
+
+                    if (el.classList.contains('nav-tab') && !el.classList.contains('nav-tab-highlight')) {
+                        gsap.to(el, { scale: 1, backgroundColor: 'transparent', color: 'var(--white)', borderColor: 'rgba(255, 255, 255, 0.2)', duration: 0.3 });
+                    }
+                    if (el.classList.contains('footer-btn')) {
+                        gsap.to(el, { scale: 1, duration: 0.3 });
+                    }
+                });
+            });
+
+            /* ========================
+               3. CREATIVE BACKGROUND (Parallax)
+               ======================== */
+            class CreativeBackground {
+                constructor() {
+                    this.bgContainer = null;
+                    this.bgImage = null;
+                    this.overlay = null;
+                    this.scrollY = 0;
+                    this.mouseX = 0;
+                    this.mouseY = 0;
+                    this.init();
+                }
+
+                init() {
+                    // Container
+                    this.bgContainer = document.createElement('div');
+                    this.bgContainer.className = 'creative-bg-container';
+                    this.bgContainer.style.cssText = `
+                        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden; z-index: -2;
+                    `;
+                    document.body.prepend(this.bgContainer);
+
+                    // Image
+                    this.bgImage = document.createElement('div');
+                    this.bgImage.className = 'creative-bg-image';
+                    this.bgImage.style.cssText = `
+                        position: absolute; top: -10%; left: -10%; width: 120%; height: 120%;
+                        background-image: url('./background.png');
+                        background-size: cover; background-position: center;
+                        will-change: transform; transition: transform 0.1s ease-out;
+                    `;
+                    this.bgContainer.appendChild(this.bgImage);
+
+                    // Overlay
+                    this.overlay = document.createElement('div');
+                    this.overlay.className = 'creative-bg-overlay';
+                    this.overlay.style.cssText = `
+                        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                        background: rgba(0, 0, 0, 0.8);
+                    `;
+                    this.bgContainer.appendChild(this.overlay);
+
+                    window.addEventListener('scroll', () => { this.scrollY = window.scrollY; this.render(); });
+                    window.addEventListener('mousemove', (e) => {
+                        this.mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+                        this.mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+                        this.render();
+                    });
+                    this.render();
+                }
+
+                render() {
+                    const parallaxY = this.scrollY * 0.5;
+                    const mouseParallaxX = this.mouseX * 20;
+                    const mouseParallaxY = this.mouseY * 20;
+                    if (this.bgImage) {
+                        this.bgImage.style.transform = `translate3d(${mouseParallaxX}px, ${parallaxY + mouseParallaxY}px, 0)`;
+                    }
+                }
+            }
+            new CreativeBackground();
+
+            /* ========================
+               4. HERO EFFECTS (Magnetic + Glitch) — desktop only
+               ======================== */
+            const glitchTargets = document.querySelectorAll('.glitch-target');
+            const headingWrappers = document.querySelectorAll('.heading-outline__wrapper');
+
+            if (window.innerWidth > 768) {
+                // Glitch Init — split text into magnetic chars
+                glitchTargets.forEach(target => {
+                    const text = target.textContent.trim();
+                    if (!text) return;
+                    target.setAttribute('data-text', text);
+                    target.classList.add('glitch-text');
+                    // Magnetic Split
+                    const chars = text.split('');
+                    target.innerHTML = chars.map(char => `<span class="magnetic-char">${char === ' ' ? '&nbsp;' : char}</span>`).join('');
+                });
+
+                // Magnetic Logic
+                headingWrappers.forEach(wrapper => {
+                    wrapper.addEventListener('mousemove', (e) => {
+                        const rect = wrapper.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        const allChars = wrapper.querySelectorAll('.magnetic-char');
+
+                        allChars.forEach((char) => {
+                            const charRect = char.getBoundingClientRect();
+                            const charX = charRect.left - rect.left + charRect.width / 2;
+                            const charY = charRect.top - rect.top + charRect.height / 2;
+                            const deltaX = x - charX;
+                            const deltaY = y - charY;
+                            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+                            if (distance < 150) {
+                                const strength = (150 - distance) / 150;
+                                const moveX = (deltaX / distance) * strength * 25;
+                                const moveY = (deltaY / distance) * strength * 25;
+                                char.style.transform = `translate(${moveX}px, ${moveY}px) scale(${1 + strength * 0.15})`;
+                            } else {
+                                char.style.transform = 'translate(0, 0) scale(1)';
+                            }
+                        });
+                    });
+
+                    wrapper.addEventListener('mouseleave', () => {
+                        const allChars = wrapper.querySelectorAll('.magnetic-char');
+                        allChars.forEach(char => char.style.transform = 'translate(0, 0) scale(1)');
+                    });
+
+                    // Trigger Glitch on Hover
+                    wrapper.addEventListener('mouseenter', () => {
+                        const target = wrapper.querySelector('.glitch-text');
+                        if (target) target.classList.add('active');
+                    });
+                    wrapper.addEventListener('mouseleave', () => {
+                        const target = wrapper.querySelector('.glitch-text');
+                        if (target) target.classList.remove('active');
+                    });
+                });
+
+                // Random ambient glitch (desktop only)
+                function randomGlitch() {
+                    const randomTarget = glitchTargets[Math.floor(Math.random() * glitchTargets.length)];
+                    if (randomTarget) {
+                        randomTarget.classList.add('active');
+                        setTimeout(() => randomTarget.classList.remove('active'), 150);
+                    }
+                    setTimeout(randomGlitch, 5000 + Math.random() * 8000);
+                }
+                setTimeout(randomGlitch, 6000);
+            } // end desktop-only hero effects
+
+            /* ========================
+               5. TIME UPDATE
+               ======================== */
+            function updateTimes() {
+                const now = new Date();
+                const ksaTime = now.toLocaleString('en-US', { timeZone: 'Asia/Riyadh', hour: 'numeric', minute: '2-digit', hour12: true });
+                const canadaTime = now.toLocaleString('en-US', { timeZone: 'America/Toronto', hour: 'numeric', minute: '2-digit', hour12: true });
+
+                const ksaEl = document.getElementById('ksa-time');
+                const canadaEl = document.getElementById('canada-time');
+                if (ksaEl) ksaEl.textContent = ksaTime;
+                if (canadaEl) canadaEl.textContent = canadaTime;
+            }
+            updateTimes();
+            setInterval(updateTimes, 1000);
+
+            /* ========================
+               6. PRELOADER INTRO SEQUENCE
+               ======================== */
+            const introTl = gsap.timeline({ delay: 0.5, onStart: playLogoIntro });
+            gsap.set('.logo-svg', { scale: 0.2, color: 'white' });
+            gsap.set('.center-content', { autoAlpha: 0, visibility: 'hidden' });
+
+            introTl.to('.logo-svg', { scale: 1.0, duration: 0.5, ease: "power4.inOut" })
+                .to('#part-m', { x: -260, y: 150, rotation: -45, duration: 0.5, ease: "power4.inOut" }, "<")
+                .to('#part-w', { x: 270, y: 50, rotation: -45, duration: 0.5, ease: "power4.inOut" }, "<")
+                .to('.center-content', { autoAlpha: 1, visibility: 'visible', duration: 0.5 }, "-=0.5");
+
+
+            /* ========================
+               7. MAIN CONTENT ENTRANCES
+               ======================== */
+            function playMainEntrances() {
+                console.log('✨ Playing Main Content Entrances');
+                // Set initial states for elements that will maintain their magnetic properties
+                gsap.set('.nav-tab', { opacity: 0, y: -20 });
+                gsap.set('.footer-bio h3', { opacity: 0, x: -30 });
+                gsap.set('.footer-btn', { opacity: 0, scale: 0.8 });
+                gsap.set('.footer-social a', { opacity: 0, y: 20 });
+                gsap.set('.time-zone', { opacity: 0, x: 30 });
+                gsap.set('.clients', { opacity: 0, y: 20 });
+
+                // Do NOT set opacity: 0 for .main-title or .subtitle wrapper because it breaks the magnetic chars
+                // Instead, animate the wrapper or handle carefully
+                gsap.fromTo('.heading-outline__wrapper',
+                    { opacity: 0, y: 30 },
+                    { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out', stagger: 0.2, delay: 0.2 }
+                );
+
+                const mainTl = gsap.timeline({ delay: 0.5 }); // Delay slightly to let curtain settle
+
+                mainTl.to('.description', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, "start+=0.4")
+                    .to('.nav-tab', { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'back.out(1.7)' }, "start+=0.5")
+                    .to('.clients', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, "start+=0.6")
+                    .to('.footer-bio h3', { opacity: 1, x: 0, duration: 1, stagger: 0.15, ease: 'power3.out' }, "start+=0.8")
+                    .to('.footer-btn', { opacity: 1, scale: 1, duration: 0.8, stagger: 0.15, ease: 'back.out(1.7)' }, "start+=1.0")
+                    .to('.footer-social a', { opacity: 0.6, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' }, "start+=1.2")
+                    .to('.time-zone', { opacity: 1, x: 0, duration: 0.8, stagger: 0.2, ease: 'power3.out' }, "start+=1.3");
+            }
+
+            /* ========================
+               8. EXIT SEQUENCE
+               ======================== */
+            function runExitSequence() {
+                console.log('🎬 Exit Sequence Triggered');
+                // playLogoIntro(); // Removed from here as per user request to play "at loading"
+
+                const exitTl = gsap.timeline();
+
+                // Phase A: Collapse
+                exitTl.to('.center-content', { autoAlpha: 0, duration: 0.5 })
+                    .to('#part-m', { x: 0, y: 0, rotation: 0, duration: 0.5, ease: "power3.inOut" }, "collapse")
+                    .to('#part-w', { x: 0, y: 0, rotation: 0, duration: 0.5, ease: "power3.inOut" }, "collapse")
+                    .to('.logo-svg', { scale: 0.5, color: '#c4ff00', duration: 0.5, ease: "power3.inOut" }, "collapse");
+
+                // Wait 0.3s
+                // Phase B: Curtain Up
+                exitTl.to('.transition-curtain', { y: '0%', duration: 1.0, ease: "power4.inOut" }); // Matches cubic-bezier(.19, .53, .46, .8) feel
+
+                // Phase C: The Swap
+                exitTl.call(() => {
+                    console.log('🔄 Swapping Content');
+                    document.getElementById('preloader').classList.add('hidden');
+                    document.getElementById('main-content').classList.add('visible');
+                    gsap.set('#main-content', { autoAlpha: 1, visibility: 'visible' });
+
+                    playMainEntrances();
+                });
+
+                // Phase D: Curtain Away
+                exitTl.to('.transition-curtain', { y: '-120%', duration: 1.0, ease: "power4.inOut" });
+            }
+
+            // Trigger exit automatically after intro
+            // Note: introTl runs immediately. We can just add the exit sequence to the end of it, 
+            // or call it with a delay. simpler to add a callback.
+
+            // Since introTl is defined above, and we want to append to it:
+            // But introTl was created with `const`. 
+
+            // Actually, best way is to modify the introTl definition above to include onComplete, 
+            // OR just use a delayed call here if we don't want to touch the top block.
+            // BUT, the user wants "auto animation alone".
+
+            // Let's modify the introTl block (lines 925-932) in a separate chunk to be cleaner? 
+            // No, I can't look back easily. 
+            // I will just add:
+            gsap.delayedCall(introTl.duration() + 0.5, runExitSequence);
+
+
+
+        });
+    </script>
+    <script src="js/global-header.js"></script>
+</body>
+
+</html>

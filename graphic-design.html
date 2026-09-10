@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphic Design - Med Wahibi</title>
+    <meta name="description" content="Explore Med Wahibi's graphic design portfolio — social media design, branding, billboards, menus, illustrations, and web design.">
+    <meta property="og:title" content="Graphic Design - Med Wahibi">
+    <meta property="og:description" content="Your brand image is in safe hands. Explore bespoke graphic design work by Med Wahibi.">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link href="./images/Favicon.webp" rel="shortcut icon" type="image/x-icon">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Brand CSS (in order per skill) -->
+    <link href="./css/medwahibi.min.css" rel="stylesheet" type="text/css">
+    <link href="./css/index-transition.css" rel="stylesheet" type="text/css">
+    <link href="./css/theme.css" rel="stylesheet" type="text/css">
+    <link href="./css/medwahibi-overrides.css" rel="stylesheet" type="text/css">
+
+    <style>
+        /* ========================
+           RESET & BASE
+           ======================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: var(--white);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            cursor: none;
+        }
+
+        a, button, .nav-tab, .footer-btn, .client-logo { cursor: none; }
+
+        /* ========================
+           CUSTOM CURSOR
+           ======================== */
+        .cursor-dot {
+            position: fixed;
+            top: 0; left: 0;
+            width: 10px; height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10001;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: normal;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+        }
+
+        /* ========================
+           MAGNETIC TEXT & GLITCH
+           ======================== */
+        .glitch-target  { display: inline-block; }
+        .magnetic-char  {
+            display: inline-block;
+            transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+            will-change: transform;
+        }
+
+        .glitch-text { position: relative; display: inline-block; }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .glitch-text.active::before {
+            animation: glitch-1 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+            color: #ff0000; z-index: -1; opacity: 0.8;
+        }
+        .glitch-text.active::after {
+            animation: glitch-2 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite reverse;
+            color: #00ffff; z-index: -2; opacity: 0.8;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(-3px, -3px); }
+            60% { transform: translate(3px, 3px); }
+            80% { transform: translate(3px, -3px); }
+        }
+        @keyframes glitch-2 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(3px, -3px); }
+            40% { transform: translate(3px, 3px); }
+            60% { transform: translate(-3px, -3px); }
+            80% { transform: translate(-3px, 3px); }
+        }
+
+        /* ========================
+           PRELOADER
+           ======================== */
+        .preloader-container {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100vh;
+            background-color: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            flex-direction: column;
+        }
+        .preloader-container.hidden { display: none !important; }
+
+        .loader-container {
+            position: relative;
+            display: flex;
+            justify-content: center; align-items: center;
+            flex-direction: column;
+            width: 100%; height: 100vh;
+        }
+
+        svg.logo-svg { height: 140px; overflow: visible; color: white; }
+        svg.logo-svg path { fill: currentColor; stroke: none; }
+
+        .center-content {
+            margin-top: 0;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0; visibility: hidden;
+            display: flex; flex-direction: column;
+            align-items: center; gap: 15px;
+            z-index: 10; width: 100%;
+            pointer-events: none;
+        }
+
+        /* ========================
+           TRANSITION CURTAIN
+           ======================== */
+        .transition-curtain {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #c4ff00;
+            z-index: 9999;
+            transform: translateY(100%);
+            will-change: transform;
+            pointer-events: none;
+        }
+        .transition-curtain::before { display: none; }
+        .transition-curtain::after {
+            content: '';
+            position: absolute;
+            bottom: -20vh; left: 0;
+            width: 100%; height: 20vh;
+            background-color: #c4ff00;
+        }
+
+        /* ========================
+           MAIN CONTENT
+           ======================== */
+        #main-content {
+            opacity: 0; visibility: hidden;
+            position: relative; z-index: 1;
+        }
+        #main-content.visible { opacity: 1; visibility: visible; }
+
+        /* ========================
+           HEADER
+           ======================== */
+        .header {
+            position: fixed; top: 0; left: 0;
+            width: 100%;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+        .logo-img { height: 24px; width: auto; }
+        .logo { font-size: 18px; font-weight: 700; color: var(--white); text-decoration: none; letter-spacing: -0.5px; }
+
+        /* ========================
+           NAV TABS
+           ======================== */
+        .nav-tabs {
+            position: fixed; top: 30px; right: 40px;
+            display: flex; gap: 15px; z-index: 100;
+        }
+        .nav-tab {
+            padding: 12px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex; align-items: center;
+        }
+        .nav-tab-highlight {
+            background: var(--accent);
+            color: var(--black) !important;
+            border-color: var(--accent);
+        }
+
+        /* ========================
+           PAGE LAYOUT - GRAPHIC DESIGN
+           ======================== */
+        .page-wrapper {
+            min-height: 100vh;
+            padding-top: 100px;
+            padding-bottom: 160px;
+        }
+
+
+        /* ========================
+           PLANET GALLERY VIEWER
+           ======================== */
+
+        .gd-gallery {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; /* Content to the right */
+            margin-top: -100px; /* offset the page-wrapper padding */
+        }
+
+        #planet-canvas-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 1;
+            cursor: grab;
+        }
+        #planet-canvas-container:active { cursor: grabbing; }
+
+        /* The floating items orbiting the planet */
+        .gd-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: border-color 0.4s ease, filter 0.4s ease;
+            filter: brightness(0.3) saturate(0.2);
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        .gd-thumb img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+        }
+
+        .gd-thumb.active {
+            border-color: var(--accent);
+            filter: brightness(1.1) saturate(1.1);
+            transform: scale(1.4);
+            box-shadow: 0 0 30px rgba(196,255,0,0.3);
+            z-index: 100 !important;
+        }
+
+        .gd-thumb:hover { filter: brightness(0.8) saturate(0.8); }
+
+        /* Hidden extracted thumbnails container */
+        #gd-thumb-strip { display: none; }
+
+        /* Floating Content on the Right */
+        .gd-stage-col {
+            position: relative;
+            z-index: 10;
+            width: 35%;
+            max-width: 480px;
+            min-width: 320px;
+            margin-right: 8%;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            pointer-events: none;
+        }
+
+        .gd-stage-col * { pointer-events: auto; }
+
+        .gd-stage {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            background: rgba(10,10,10,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        }
+
+        .gd-stage-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .gd-stage-slide.active { opacity: 1; visibility: visible; }
+
+        .gd-stage-slide img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+            opacity: 0.95;
+        }
+
+        .gd-info-bar {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            background: rgba(10,10,10,0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 24px;
+            border-radius: 12px;
+        }
+
+        .gd-slide-counter { font-size: 11px; letter-spacing: 3px; color: rgba(255,255,255,0.4); margin-bottom: 8px; font-weight: 500; }
+        .gd-slide-title { font-size: 24px; font-weight: 700; color: var(--white); letter-spacing: -0.01em; margin-bottom: 4px; }
+        .gd-slide-category { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+        .gd-slide-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--white) !important; text-decoration: none; margin-top: 16px; transition: color 0.3s ease; }
+        .gd-slide-link:hover { color: var(--accent) !important; }
+        
+        .gd-nav-hint { display: flex; gap: 12px; align-items: center; }
+        .gd-nav-btn {
+            width: 44px; height: 44px; border: 1px solid rgba(255,255,255,0.15); border-radius: 50%;
+            background: transparent; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s ease; color: var(--white);
+        }
+        .gd-nav-btn:hover { border-color: var(--accent); color: var(--accent); transform: scale(1.05); }
+
+        /* ========================
+           RESPONSIVE
+           ======================== */
+
+        /* ========================
+           FOOTER
+           ======================== */
+        .footer-new {
+            position: fixed; bottom: 0; left: 0;
+            width: 100%;
+            padding: 24px 40px;
+            background: transparent;
+            z-index: 100;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px; flex-wrap: wrap;
+        }
+        .footer-bio h3 { font-size: 14px; font-weight: 400; color: var(--white); margin: 0; line-height: 1.5; }
+        .footer-cta { display: flex; gap: 16px; }
+        .footer-btn {
+            padding: 10px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--white); text-decoration: none;
+            font-size: 13px; transition: all 0.3s ease; white-space: nowrap;
+        }
+        .footer-btn-highlight { background: var(--accent); color: var(--black); border-color: var(--accent); }
+        .footer-social { display: flex; gap: 20px; }
+        .footer-social a { color: var(--white); opacity: 0.6; transition: opacity 0.3s ease; }
+        .footer-social a:hover { opacity: 1; }
+        .footer-times { display: flex; gap: 40px; }
+        .time-zone { text-align: right; }
+        .time-location { font-size: 11px; color: var(--gray); margin-bottom: 2px; }
+        .time-display { font-size: 18px; font-weight: 600; color: var(--white); }
+        .time-tz { font-size: 10px; color: var(--gray); margin-top: 2px; }
+
+        /* ========================
+           RESPONSIVE
+           ======================== */
+        @media (max-width: 1024px) {
+            .gd-gallery-inner { padding: 0 30px; }
+        }
+        @media (max-width: 768px) {
+            .gd-gallery-inner { grid-template-columns: 1fr; }
+            .gd-thumb-strip { flex-direction: row; overflow-x: auto; width: 100%; }
+            .nav-tabs { top: 80px; right: 20px; gap: 8px; flex-wrap: wrap; }
+            .footer-content { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .footer-times { display: none; }
+        }
+    </style>
+    <link rel="stylesheet" href="css/global-header.css">
+</head>
+
+<body>
+
+    <!-- 1. CUSTOM CURSOR -->
+    <div class="cursor-dot"></div>
+
+    <!-- 2. TRANSITION CURTAIN -->
+    <div class="transition-curtain"></div>
+
+    <!-- 3. PRELOADER -->
+    <div class="preloader-container" id="preloader">
+        <div class="loader-container">
+            <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 428.88 293.96">
+                <g id="part-m">
+                    <path d="M116.12,18.1c20.75-21.83,59.9-25.45,81.64-2.34,6.77,6.74,22.36,22.1,28.95,28.77,6.8-6.8,20.81-20.81,27.54-27.54.08-.04.15-.08.19-.15,20.08-15.81,52.49-16.43,73.04-1.19,8.43,5.76,37.7,37.52,45.65,45.03,19.79,19.72-3.71,52.73-28.92,40.12l-42.31-39.89-.15.15c-5.73-6.15-17.09-5.13-21.6,2.07,0,0-17.38,17.41-17.38,17.41l-22.09,22.06v.04c-9.07,9.14-49.45,48.96-59.42,58.8-14.61,15.69-43.56,4.07-42.81-17.72,0-8.28,4.03-15.65,10.24-20.14l42-43.04-22.48-22.48-.11.12c-4.97-5.39-14.9-5.39-19.87,0l-.08-.08c-23.73,23.89-80.99,80.59-105.49,104.87-8.87,9.62-26.57,9.62-35.44,0-9.62-8.88-9.63-26.57,0-35.44,0,0,108.9-109.44,108.9-109.44Z" />
+                </g>
+                <g id="part-w">
+                    <path d="M294.73,296.37c-20.75,21.83-59.9,25.45-81.64,2.34-6.77-6.74-22.36-22.1-28.95-28.77-6.8,6.8-20.81,20.81-27.54,27.54-.08.04-.15.08-.19.15-20.08,15.81-52.49,16.43-73.04,1.19-8.43-5.76-37.7-37.52-45.65-45.03-19.79-19.72,3.71-52.73,28.92-40.12l42.31,39.89.15-.15c5.73,6.15,17.09,5.13,21.6-2.07,0,0,17.38-17.41,17.38-17.41l22.09-22.06v-.04c9.07-9.14,49.45-48.96,59.42-58.8,14.61-15.69,43.56-4.07,42.81,17.72,0,8.28-4.03,15.65-10.24,20.14l-42,43.04,22.48,22.48.11-.12c4.97,5.39,14.9,5.39,19.87,0l.08.08c23.73-23.89,80.99-80.59,105.49-104.87,8.87-9.62,26.57-9.62,35.44,0,9.62,8.88,9.63,26.57,0,35.44,0,0-108.9,109.44-108.9,109.44Z" />
+                </g>
+            </svg>
+            <div class="center-content"></div>
+        </div>
+    </div>
+
+    <!-- 4. MAIN CONTENT -->
+    <div id="main-content">
+
+        
+
+        <!-- Navigation Tabs — "Graphic" is active -->
+        
+    <!-- 1. CURSOR -->
+    <div class="cursor-dot"></div>
+
+    <!-- 2. TRANSITION CURTAIN -->
+    <div class="transition-curtain"></div>
+    
+    <!-- Header — HOVS-style bar: [empty] [centered logo] [hamburger] -->
+    <header class="header">
+        <a href="./index.html" class="logo">
+            <img src="./images/LOGO-WHITE-MED.webp" alt="Med Wahibi" class="logo-img">
+        </a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Desktop Nav Strip (hidden on mobile via CSS) -->
+    <nav class="nav-tabs" aria-label="Desktop navigation">
+        <a href="branding.html" class="nav-tab">Branding</a>
+        <a href="graphic-design.html" class="nav-tab">Graphic Design</a>
+        <a href="projects.html" class="nav-tab">Projects</a>
+        <a href="mailto:hello@medwahibi.com" class="nav-tab nav-tab-highlight">Contact</a>
+    </nav>
+
+    <!-- Mobile Full-Screen Menu -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" role="dialog" aria-label="Navigation menu">
+        <div class="menu-top-section">
+            <img src="./Images needed for home page/flower-medieval.svg" class="menu-flower" alt="Ornament">
+            <nav class="mobile-menu-links">
+                <div class="menu-connecting-line"></div>
+                <a href="branding.html" class="mobile-menu-link">Branding</a>
+                <a href="graphic-design.html" class="mobile-menu-link">Graphics</a>
+                <a href="projects.html" class="mobile-menu-link">Projects</a>
+            </nav>
+        </div>
+        
+        <div class="mobile-menu-sheet">
+            <p class="description">
+                Med Wahibi crafts<br>
+                innovative digital experiences<br>
+                that blend creativity with code.
+            </p>
+            <div class="mobile-menu-buttons">
+                <a href="branding.html" class="mobile-menu-btn-dark">My Work -></a>
+                <a href="mailto:hello@medwahibi.com" class="mobile-menu-btn-lime">Say Hello -></a>
+            </div>
+            <div class="mobile-menu-socials">
+                <a href="mailto:hello@medwahibi.com" aria-label="Email">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </a>
+                <a href="https://instagram.com/medwahibi" target="_blank" aria-label="Instagram">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+        <!-- Page Body -->
+        <div class="page-wrapper">
+
+            <!-- Immersive 3D Planet Gallery Viewer -->
+            <div class="gd-gallery" id="gd-gallery" aria-label="Portfolio Gallery">
+                <div id="planet-canvas-container"></div>
+                <!-- Lime progress bar -->
+                <div class="gd-progress" id="gd-progress"></div>
+
+                <div class="gd-gallery-inner" style="display:contents;">
+
+                    <!-- Extracted thumbnails -->
+                    <div class="gd-thumb-strip" id="gd-thumb-strip">
+                        <div class="gd-thumb active" data-index="0" title="SociaLUXE">
+                            <img src="./images/Portfolio/social-media-design.webp" alt="">
+                        </div>
+                        <div class="gd-thumb" data-index="1" title="OKSA">
+                            <img src="./images/Portfolio/oksa-logo-design.webp" alt="">
+                        </div>
+                        <div class="gd-thumb" data-index="2" title="Menu Design">
+                            <img src="./images/Portfolio/menu-design.webp" alt="">
+                        </div>
+                        <div class="gd-thumb" data-index="3" title="Billboards & Banners">
+                            <img src="./images/Portfolio/billboard-design.webp" alt="">
+                        </div>
+                        <div class="gd-thumb" data-index="4" title="Brand Guidelines">
+                            <img src="./images/Portfolio/brand-guideline-design.webp" alt="">
+                        </div>
+                        <div class="gd-thumb" data-index="5" title="Illustrations">
+                            <img src="./images/Portfolio/illustration-design.webp" alt="">
+                        </div>
+                        <div class="gd-thumb" data-index="6" title="Web Design">
+                            <img src="./images/Portfolio/website-design.webp" alt="">
+                        </div>
+                    </div>
+
+                    <!-- Right: stage + info -->
+                    <div class="gd-stage-col">
+
+                        <!-- Center Stage -->
+                        <div class="gd-stage" id="gd-stage">
+                            <div class="gd-stage-slide active" data-index="0">
+                                <img src="./images/Portfolio/social-media-design.webp" alt="SociaLUXE" loading="eager">
+                            </div>
+                            <div class="gd-stage-slide" data-index="1">
+                                <img src="./images/Portfolio/oksa-logo-design.webp" alt="OKSA" loading="eager">
+                            </div>
+                            <div class="gd-stage-slide" data-index="2">
+                                <img src="./images/Portfolio/menu-design.webp" alt="Menu Design" loading="eager">
+                            </div>
+                            <div class="gd-stage-slide" data-index="3">
+                                <img src="./images/Portfolio/billboard-design.webp" alt="Billboards & Banners" loading="eager">
+                            </div>
+                            <div class="gd-stage-slide" data-index="4">
+                                <img src="./images/Portfolio/brand-guideline-design.webp" alt="Brand Guidelines" loading="eager">
+                            </div>
+                            <div class="gd-stage-slide" data-index="5">
+                                <img src="./images/Portfolio/illustration-design.webp" alt="Illustrations" loading="eager">
+                            </div>
+                            <div class="gd-stage-slide" data-index="6">
+                                <img src="./images/Portfolio/website-design.webp" alt="Web Design" loading="eager">
+                            </div>
+                        </div>
+
+                        <!-- Info bar -->
+                        <div class="gd-info-bar">
+                            <div class="gd-info-left">
+                                <div class="gd-slide-counter" id="gd-counter">01 / 07</div>
+                                <div class="gd-slide-title" id="gd-title">SociaLUXE</div>
+                                <div class="gd-slide-category" id="gd-category">Social Media Design</div>
+                                <a href="./social-media-design.html" class="gd-slide-link" id="gd-link">
+                                    View Case Study →
+                                </a>
+                            </div>
+                            <div class="gd-nav-hint">
+                                <button class="gd-nav-btn" id="gd-prev" aria-label="Previous project">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+                                </button>
+                                <button class="gd-nav-btn" id="gd-next" aria-label="Next project">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div><!-- end .gd-stage-col -->
+                </div><!-- end .gd-gallery-inner -->
+            </div><!-- end .gd-gallery -->
+
+        </div>
+        <!-- end .page-wrapper -->
+
+        <!-- Footer -->
+        <footer class="footer-new">
+            <div class="footer-content">
+                <div class="footer-bio">
+                    <h3>Med Wahibi crafts</h3>
+                    <h3>innovative digital experiences</h3>
+                </div>
+                <div class="footer-cta">
+                    <a href="branding.html" class="footer-btn">My Work →</a>
+                    <a href="mailto:hello@medwahibi.com" class="footer-btn footer-btn-highlight">Contact me →</a>
+                </div>
+                <div class="footer-social">
+                    <a href="https://instagram.com/medwahibi" target="_blank" aria-label="Instagram">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com/in/medWahibi" target="_blank" aria-label="LinkedIn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                            <rect x="2" y="9" width="4" height="12"></rect>
+                            <circle cx="4" cy="4" r="2"></circle>
+                        </svg>
+                    </a>
+                    <a href="mailto:hello@medwahibi.com" aria-label="Email">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </a>
+                </div>
+                <div class="footer-times">
+                    <div class="time-zone">
+                        <div class="time-location">Riyadh, KSA</div>
+                        <div class="time-display" id="ksa-time">12:00 AM</div>
+                        <div class="time-tz">AST</div>
+                    </div>
+                    <div class="time-zone">
+                        <div class="time-location">Ottawa, Canada</div>
+                        <div class="time-display" id="canada-time">12:00 AM</div>
+                        <div class="time-tz">EST</div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- end #main-content -->
+
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS2DRenderer.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('✅ Graphic Design Page — Brand System Active');
+
+            /* ========================
+               1. AUDIO SETUP
+               ======================== */
+            const hoverSound = new Audio('studiolumio.com/sound/hover_button.mp3');
+            const logoSound  = new Audio('studiolumio.com/sound/logo_intro.mp3');
+
+            function playHover() {
+                hoverSound.currentTime = 0;
+                hoverSound.play().catch(e => {});
+            }
+            function playLogoIntro() {
+                logoSound.currentTime = 0;
+                logoSound.play().catch(e => {});
+            }
+
+            /* ========================
+               1b. ACCENT BUTTON — GSAP HOVER
+               ======================== */
+            gsap.utils.toArray('.gd-cta, .btn-accent, .footer-btn-highlight').forEach(btn => {
+                btn.addEventListener('mouseenter', () => {
+                    gsap.to(btn, {
+                        scale: 1.06,
+                        duration: 0.4,
+                        ease: 'elastic.out(1.2, 0.5)'
+                    });
+                });
+                btn.addEventListener('mouseleave', () => {
+                    gsap.to(btn, {
+                        scale: 1,
+                        duration: 0.35,
+                        ease: 'power2.out'
+                    });
+                });
+            });
+
+            /* ========================
+               2. CUSTOM CURSOR
+               ======================== */
+            const cursorDot = document.querySelector('.cursor-dot');
+            document.addEventListener('mousemove', (e) => {
+                gsap.set(cursorDot, { x: e.clientX, y: e.clientY });
+            });
+
+            const allInteractive = document.querySelectorAll('a, button, .nav-tab, .footer-btn, .gd-cta, .gd-filter-btn, .gd-item');
+            allInteractive.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    playHover();
+                    gsap.to(cursorDot, { scale: 3, mixBlendMode: 'difference', duration: 0.3 });
+
+                    if (el.classList.contains('nav-tab') && !el.classList.contains('nav-tab-highlight')) {
+                        gsap.to(el, { scale: 1.05, backgroundColor: 'var(--accent)', color: 'var(--black)', borderColor: 'var(--accent)', duration: 0.3 });
+                    }
+                    if (el.classList.contains('footer-btn') && !el.classList.contains('footer-btn-highlight')) {
+                        gsap.to(el, { scale: 1.05, duration: 0.3 });
+                    }
+                });
+                el.addEventListener('mouseleave', () => {
+                    gsap.to(cursorDot, { scale: 1, mixBlendMode: 'normal', duration: 0.3 });
+
+                    if (el.classList.contains('nav-tab') && !el.classList.contains('nav-tab-highlight')) {
+                        gsap.to(el, { scale: 1, backgroundColor: 'transparent', color: 'var(--white)', borderColor: 'rgba(255,255,255,0.2)', duration: 0.3 });
+                    }
+                    if (el.classList.contains('footer-btn') && !el.classList.contains('footer-btn-highlight')) {
+                        gsap.to(el, { scale: 1, duration: 0.3 });
+                    }
+                });
+            });
+
+            /* Background handled by webgl-gradient.js (see script tag below) */
+
+            /* ========================
+               3. SCROLL STATE: Solid Header & Footer
+               ======================== */
+            (function () {
+                const headerEl = document.querySelector('.header');
+                const footerEl = document.querySelector('.footer-new');
+                const SCROLL_THRESHOLD = 50;
+
+                function updateScrollState() {
+                    const scrolled = window.scrollY > SCROLL_THRESHOLD;
+                    headerEl?.classList.toggle('is-scrolled', scrolled);
+                    footerEl?.classList.toggle('is-scrolled', scrolled);
+                }
+
+                window.addEventListener('scroll', updateScrollState, { passive: true });
+                updateScrollState(); // Run once on load in case page is pre-scrolled
+            })();
+
+            /* ========================
+               3b. GALLRY ENGINE LOGIC (Delegated to external JS)
+               ======================== */
+               console.log("3D Planet initialising...");
+
+            /* ========================
+               4. MAGNETIC TEXT + GLITCH
+               ======================== */
+            const glitchTargets   = document.querySelectorAll('.glitch-target');
+            const headingWrappers = document.querySelectorAll('.heading-outline__wrapper');
+
+            glitchTargets.forEach(target => {
+                const text = target.textContent.trim();
+                if (!text) return;
+                target.setAttribute('data-text', text);
+                target.classList.add('glitch-text');
+                target.innerHTML = text.split('').map(
+                    char => `<span class="magnetic-char">${char === ' ' ? '&nbsp;' : char}</span>`
+                ).join('');
+            });
+
+            headingWrappers.forEach(wrapper => {
+                wrapper.addEventListener('mousemove', (e) => {
+                    const rect = wrapper.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    wrapper.querySelectorAll('.magnetic-char').forEach(char => {
+                        const cRect = char.getBoundingClientRect();
+                        const cx = cRect.left - rect.left + cRect.width / 2;
+                        const cy = cRect.top - rect.top + cRect.height / 2;
+                        const dx = x - cx, dy = y - cy;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 150) {
+                            const s = (150 - dist) / 150;
+                            char.style.transform = `translate(${(dx / dist) * s * 25}px, ${(dy / dist) * s * 25}px) scale(${1 + s * 0.15})`;
+                        } else {
+                            char.style.transform = 'translate(0,0) scale(1)';
+                        }
+                    });
+                });
+                wrapper.addEventListener('mouseleave', () => {
+                    wrapper.querySelectorAll('.magnetic-char').forEach(c => c.style.transform = 'translate(0,0) scale(1)');
+                });
+                wrapper.addEventListener('mouseenter', () => wrapper.querySelector('.glitch-text')?.classList.add('active'));
+                wrapper.addEventListener('mouseleave', () => wrapper.querySelector('.glitch-text')?.classList.remove('active'));
+            });
+
+            function randomGlitch() {
+                const t = glitchTargets[Math.floor(Math.random() * glitchTargets.length)];
+                if (t) { t.classList.add('active'); setTimeout(() => t.classList.remove('active'), 150); }
+                setTimeout(randomGlitch, 5000 + Math.random() * 8000);
+            }
+            setTimeout(randomGlitch, 6000);
+
+            /* ========================
+               5. LIVE CLOCK
+               ======================== */
+            function updateTimes() {
+                const now = new Date();
+                const ksaTime    = now.toLocaleString('en-US', { timeZone: 'Asia/Riyadh',     hour: 'numeric', minute: '2-digit', hour12: true });
+                const canadaTime = now.toLocaleString('en-US', { timeZone: 'America/Toronto', hour: 'numeric', minute: '2-digit', hour12: true });
+                const ksaEl    = document.getElementById('ksa-time');
+                const canadaEl = document.getElementById('canada-time');
+                if (ksaEl)    ksaEl.textContent    = ksaTime;
+                if (canadaEl) canadaEl.textContent = canadaTime;
+            }
+            updateTimes();
+            setInterval(updateTimes, 1000);
+
+            /* ========================
+               6. PRELOADER INTRO + EXIT
+               ======================== */
+            const introTl = gsap.timeline({ delay: 0.5, onStart: playLogoIntro });
+            gsap.set('.logo-svg',      { scale: 0.2, color: 'white' });
+            gsap.set('.center-content', { autoAlpha: 0, visibility: 'hidden' });
+
+            introTl
+                .to('.logo-svg',       { scale: 1.0, duration: 0.5, ease: 'power4.inOut' })
+                .to('#part-m',         { x: -260, y: 150, rotation: -45, duration: 0.5, ease: 'power4.inOut' }, '<')
+                .to('#part-w',         { x: 270,  y: 50,  rotation: -45, duration: 0.5, ease: 'power4.inOut' }, '<')
+                .to('.center-content', { autoAlpha: 1, visibility: 'visible', duration: 0.5 }, '-=0.5');
+
+            /* ========================
+               7. MAIN CONTENT ENTRANCES
+               ======================== */
+            function playMainEntrances() {
+                gsap.set('.nav-tab',       { opacity: 0, y: -20 });
+                gsap.set('.footer-bio h3', { opacity: 0, x: -30 });
+                gsap.set('.footer-btn',    { opacity: 0, scale: 0.8 });
+                gsap.set('.footer-social a', { opacity: 0, y: 20 });
+                gsap.set('.time-zone',     { opacity: 0, x: 30 });
+                gsap.set('.gd-label',      { opacity: 0, y: 20 });
+                gsap.set('.gd-description', { opacity: 0, y: 20 });
+                gsap.set('.gd-cta',        { opacity: 0, y: 20 });
+                gsap.set('.gd-stats',      { opacity: 0, x: 30 });
+                gsap.set('.gd-item',       { opacity: 0, y: 30 });
+                gsap.set('.gd-filter-btn', { opacity: 0, y: 10 });
+
+                gsap.fromTo('.heading-outline__wrapper',
+                    { opacity: 0, y: 30 },
+                    { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out', stagger: 0.15, delay: 0.2 }
+                );
+
+                const mainTl = gsap.timeline({ delay: 0.4 });
+                mainTl
+                    .to('.gd-label',       { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },           'start+=0.2')
+                    .to('.nav-tab',        { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'back.out(1.7)' }, 'start+=0.3')
+                    .to('.gd-description', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },           'start+=0.5')
+                    .to('.gd-cta',         { opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.7)' },         'start+=0.65')
+                    .to('.gd-stats',       { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' },           'start+=0.5')
+                    .to('.gd-filter-btn',  { opacity: 1, y: 0, duration: 0.5, stagger: 0.05, ease: 'power2.out' }, 'start+=0.7')
+                    .to('.gd-item',        { opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: 'power3.out' }, 'start+=0.85')
+                    .to('.footer-bio h3',  { opacity: 1, x: 0, duration: 1,   stagger: 0.15, ease: 'power3.out' }, 'start+=1.0')
+                    .to('.footer-btn',     { opacity: 1, scale: 1, duration: 0.8, stagger: 0.15, ease: 'back.out(1.7)' }, 'start+=1.1')
+                    .to('.footer-social a', { opacity: 0.6, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' }, 'start+=1.2')
+                    .to('.time-zone',      { opacity: 1, x: 0, duration: 0.8, stagger: 0.2, ease: 'power3.out' }, 'start+=1.3');
+            }
+
+            /* ========================
+               8. EXIT SEQUENCE (Curtain)
+               ======================== */
+            function runExitSequence() {
+                const exitTl = gsap.timeline();
+
+                exitTl
+                    .to('.center-content', { autoAlpha: 0, duration: 0.5 })
+                    .to('#part-m', { x: 0, y: 0, rotation: 0, duration: 0.5, ease: 'power3.inOut' }, 'collapse')
+                    .to('#part-w', { x: 0, y: 0, rotation: 0, duration: 0.5, ease: 'power3.inOut' }, 'collapse')
+                    .to('.logo-svg', { scale: 0.5, color: '#c4ff00', duration: 0.5, ease: 'power3.inOut' }, 'collapse');
+
+                exitTl.to('.transition-curtain', { y: '0%', duration: 1.0, ease: 'power4.inOut' });
+
+                exitTl.call(() => {
+                    document.getElementById('preloader').classList.add('hidden');
+                    document.getElementById('main-content').classList.add('visible');
+                    gsap.set('#main-content', { autoAlpha: 1, visibility: 'visible' });
+                    playMainEntrances();
+                });
+
+                exitTl.to('.transition-curtain', { y: '-120%', duration: 1.0, ease: 'power4.inOut' });
+            }
+
+            gsap.delayedCall(introTl.duration() + 0.5, runExitSequence);
+        });
+    </script>
+
+    <!-- WebGL Space / Smoke Background -->
+    <script src="./js/webgl-gradient.js" type="text/javascript"></script>
+
+    <script src="js/global-header.js"></script>
+</body>
+    <!-- 3D Planet Gallery Script -->
+    <script src="./js/planet-gallery.js"></script>
+</html>
